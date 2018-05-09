@@ -18,10 +18,40 @@
                 <img src="img/pointer.png" id="pointer">
             </div>
             <br>
-            <h3>Degree：<span id="degree">none</span>o</h3>
-            <h3>Temperature：<span id="temp">none</span>oc</h3>
+            <h3>Degree：
+                <span id="degree">none</span>o</h3>
+            <h3>Temperature：
+                <span id="temp">none</span>oc</h3>
         </div>
     </div>
+    <script>
+        var celsiua = 0;
+        var degree = 0;
+        setup();
+    
+        function loop() {
+    
+            if (cpf){
+                tempdata=cpf.get("temperature sensor");
+                celsius=toCelsius(tempdata);
+                document.getElementById("temp").innerHTML=celsius;
+            }
+            setTimeout(loop,1000);
+        }
+        loop();
+        function toCelsius(value) {
+            var resistance = parseFloat((1023-value) * 10000 / value);
+            var temperature = 1 / (Math.log(resistance / 10000) / 3975+1 / 298.15) - 273.15;
+            
+            return temperature.toFixed(2);
+        }
+        function setup(){
+            if(cpf){
+                cpf.setPinMode('[resetPin],["setPinMode","analog",1,"INPUT],[setPinMode","digital",4,"SERVO"]');
+            }
+        }
+    </script>
 </body>
+
 
 </html>
